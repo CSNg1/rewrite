@@ -1,0 +1,14 @@
+.idea
+*.iml
+*.ipr
+*.iws
+*.log
+target
+node
+node_modules
+bower_components
+src/main/js/.build/
+src/main/js/lib/
+src/main/resources/js/
+src/main/js/test/build
+
