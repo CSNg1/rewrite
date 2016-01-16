@@ -1,0 +1,145 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="Microsoft Excel Plugin for Confluence by ServiceRocket" plugins-version="2" >
+    <plugin-info>
+        <description>${pom.description}</description>
+        <version>${pom.version}</version>
+        <vendor name="${pom.organization.name}" url="${pom.organization.url}" />
+        <param name="plugin-icon">icon.png</param>
+        <param name="plugin-logo">logo.png</param>
+    </plugin-info>
+
+    <xhtml-macro name='excel-table'
+                 class='com.servicerocket.confluence.plugin.excel.macro.ExcelTableMacro'
+                 key='excel-table'
+                 documentation-url='https://docs.servicerocket.com/display/SE/Getting+Started+with+Secure+Macro?ref=inapp-securebrowser'>
+        <description>Create a section to display conceal content.</description>
+        <parameters>
+            <parameter type="string" name="excel" required="true" />
+            <parameter type="string" name="worksheet" required="true" />
+            <parameter type="boolean" name="hasHeader" required="true" />
+            <parameter type="string" name="fromColumn" required="true" />
+            <parameter type="string" name="toColumn" required="true" />
+            <parameter type="string" name="fromRow" required="true" />
+            <parameter type="string" name="toRow" required="true" />
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name='excel-barchart'
+                 class='com.servicerocket.confluence.plugin.excel.macro.ExcelBarchartMacro'
+                 key='excel-barchart'
+                 documentation-url='https://docs.servicerocket.com/display/SE/Getting+Started+with+Secure+Macro?ref=inapp-securebrowser'>
+        <description>Create a section to display conceal content.</description>
+        <parameters>
+            <parameter type="string" name="excel" required="true" />
+            <parameter type="string" name="worksheet" required="true" />
+            <parameter type="boolean" name="hasHeader" required="true" />
+            <parameter type="string" name="fromColumn" required="true" />
+            <parameter type="string" name="toColumn" required="true" />
+            <parameter type="string" name="fromRow" required="true" />
+            <parameter type="string" name="toRow" required="true" />
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name='excel-piechart'
+                 class='com.servicerocket.confluence.plugin.excel.macro.ExcelPiechartMacro'
+                 key='excel-piechart'
+                 documentation-url='https://docs.servicerocket.com/display/SE/Getting+Started+with+Secure+Macro?ref=inapp-securebrowser'>
+        <description>Create a section to display conceal content.</description>
+        <parameters>
+            <parameter type="string" name="excel" required="true" />
+            <parameter type="string" name="worksheet" required="true" />
+            <parameter type="boolean" name="hasHeader" required="true" />
+            <parameter type="string" name="fromColumn" required="true" />
+            <parameter type="string" name="toColumn" required="true" />
+            <parameter type="string" name="fromRow" required="true" />
+            <parameter type="string" name="toRow" required="true" />
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name='excel-linechart'
+                 class='com.servicerocket.confluence.plugin.excel.macro.ExcelLinechartMacro'
+                 key='excel-linechart'
+                 documentation-url='https://docs.servicerocket.com/display/SE/Getting+Started+with+Secure+Macro?ref=inapp-securebrowser'>
+        <description>Create a section to display conceal content.</description>
+        <parameters>
+            <parameter type="string" name="excel" required="true" />
+            <parameter type="string" name="worksheet" required="true" />
+            <parameter type="boolean" name="hasHeader" required="true" />
+            <parameter type="string" name="fromColumn" required="true" />
+            <parameter type="string" name="toColumn" required="true" />
+            <parameter type="string" name="fromRow" required="true" />
+            <parameter type="string" name="toRow" required="true" />
+        </parameters>
+    </xhtml-macro>
+
+
+    <web-resource key="excel-table-mb-override" name="Excel Table macro browser overrides">
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
+        <resource type="download" name="excel-table-mb-override.js" location="js/excel-table-mb-override.js" />
+        <dependency>confluence.editor.actions:editor-macro-browser</dependency>
+        <context>macro-browser</context>
+        <!--
+        In Confluence 5.5, intermittently, `macro-browser` context is not loaded when browsing from view page.
+        So, macro-overrides is being associated with `viewcontent` context too.
+        -->
+        <!--<context>viewcontent</context>-->
+    </web-resource>
+
+    <web-resource key="excel-table-view" name="Excel Table View" >
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
+        <resource name="excel-table-view.js" type="download" location="js/excel-table-view.js" />
+        <context>viewcontent</context>
+        <dependency>com.atlassian.auiplugin:aui-experimental-table-sortable</dependency>
+    </web-resource>
+
+    <web-resource key="excel-barchart-view" name="Excel Barchart View" >
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
+        <resource name="excel-barchart-view.js" type="download" location="js/excel-barchart-view.js" />
+        <context>viewcontent</context>
+        <dependency>com.servicerocket.confluence.plugin.excel:excel-barchart-css</dependency>
+    </web-resource>
+
+    <web-resource key="excel-piechart-view" name="Excel Piechart View" >
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
+        <resource name="excel-piechart-view.js" type="download" location="js/excel-piechart-view.js" />
+        <context>viewcontent</context>
+        <dependency>com.servicerocket.confluence.plugin.excel:excel-piechart-css</dependency>
+    </web-resource>
+
+    <web-resource key="excel-linechart-view" name="Excel Linechart View" >
+        <transformation extension="js">
+            <transformer key="jsI18n"/>
+        </transformation>
+        <resource name="excel-linechart-view.js" type="download" location="js/excel-linechart-view.js" />
+        <context>viewcontent</context>
+        <dependency>com.servicerocket.confluence.plugin.excel:excel-linechart-css</dependency>
+    </web-resource>
+
+    <web-resource key="excel-barchart-css" name="Excel Barchart CSS" >
+        <resource name="excel-barchart.css" type="download" location="css/excel-barchart.css" />
+        <context>editor-content</context>
+    </web-resource>
+
+    <web-resource key="excel-piechart-css" name="Excel Piechart CSS" >
+        <resource name="excel-piechart.css" type="download" location="css/excel-piechart.css" />
+        <context>editor-content</context>
+    </web-resource>
+
+    <web-resource key="excel-linechart-css" name="Excel Linechart CSS" >
+        <resource name="excel-linechart.css" type="download" location="css/excel-linechart.css" />
+        <context>editor-content</context>
+    </web-resource>
+
+    <rest name="ServiceRocket MS Excel SpreadSheet Plugin Resources" key="excel-plugin-rest-resource"
+          path="/spreadsheet-plugin" version="1.0">
+        <description>ServiceRocket Microsoft Excel plugin for Atlassian Confluence.</description>
+    </rest>
+
+</atlassian-plugin>

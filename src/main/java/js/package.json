@@ -1,0 +1,27 @@
+{
+  "name": "linking-plugin",
+  "version": "1.0.0",
+  "description": "Linking plugin rewrite",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "Commercial",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CSNg1/rewrite.git"
+  },
+  "keywords": [
+    "ChiSiang"
+  ],
+  "dependencies": {
+    "lodash": "^3.10.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.3.26",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "eslint": "^1.10.3",
+    "webpack": "^1.12.9"
+  }
+}
