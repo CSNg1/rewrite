@@ -1,7 +1,9 @@
 package com.servicerocket.chisiang.plugin.linking;
 
+import com.atlassian.confluence.macro.Macro;
+
 /**
- * Created by CSNg on 16/01/2016.
+ * @author by CSNg on 15/01/2016.
+ * @since 1.0.0.20160115
  */
-public class AbstractMacro {
-}
+public abstract class AbstractMacro implements Macro {}
