@@ -2,26 +2,50 @@
     <plugin-info>
         <description>${pom.description}</description>
         <version>${pom.version}</version>
-        <!--<param name="plugin-icon">icon.png</param>
-        <param name="plugin-logo">logo.png</param>-->
+        <param name="plugin-icon">icon.png</param>
+        <param name="plugin-logo">logo.png</param>
     </plugin-info>
 
-    <xhtml-macro name="tutorial-macro"
-                 class="com.servicerocket.chisiang.plugin.linking.ExampleMacro" key="my-macro">
-        <parameters/>
-    </xhtml-macro>
-
-    <xhtml-macro name="linkpage"
-                 class="com.servicerocket.chisiang.plugin.linking.LinkPageMacro"
-                 key="linkpage-macro">
-        <description>Link Page</description>
+    <xhtml-macro name="link page rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.LinkPageMacro"
+                 key="linkpage-macro"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/link-page">
+        <description>Adds a link to a page, with an optional template and/or parent page specified if the page doesn't
+            exist yet.
+        </description>
         <parameters>
-            <parameter name="name" type="confluence-content">
-                <alias name=""/>
+            <parameter name="pageName" type="confluence-content">
             </parameter>
-            <parameter name="linkText" type="string" required="true"/>
+            <parameter name="linkText" type="string" required="true">
+            </parameter>
             <parameter name="source" type="confluence-content">
             </parameter>
+           <parameter name="sourceType" type="enum" default="template">
+                <value name="template"/>
+                <value name="page"/>
+            </parameter>
+            <!--
+            <parameter name="Live Template" type="boolean" default="false">
+                <alias name="liveTemplate"/>
+            </parameter>
+            <parameter name="Prefix" type="string">
+                <alias name="prefix"/>
+            </parameter>
+            <parameter name="Postfix" type="string">
+                <alias name="postfix"/>
+            </parameter>
+            <parameter name="Parent" type="string" default="@self">
+                <alias name="parent"/>
+            </parameter>
+            <parameter name="Labels" type="string" default="">
+                <alias name="pageLabels"/>
+            </parameter>
+            <parameter name="Tip" type="string" default="">
+                <alias name="linkTip"/>
+            </parameter>
+            <parameter name="Allow Rename" type="boolean" default="false">
+                <alias name="allowRename"/>
+            </parameter>-->
         </parameters>
     </xhtml-macro>
 

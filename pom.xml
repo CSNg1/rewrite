@@ -31,7 +31,7 @@
 
         <amps.enableCompression>true</amps.enableCompression>
 
-        <platform.minVersion>5.4</platform.minVersion>
+        <platform.minVersion>5.9.3</platform.minVersion>
         <platform.maxVersion>5.9.3</platform.maxVersion>
 
         <nodeVersion>v5.2.0</nodeVersion>
@@ -73,7 +73,7 @@
                             <goal>webpack</goal>
                         </goals>
                         <configuration>
-                            <arguments>--optimize-minimize</arguments>
+                            <arguments>&#45;&#45;optimize-minimize</arguments>
                             <workingDirectory>${project.build.sourceRootDirectory}/js</workingDirectory>
                         </configuration>
                     </execution>
@@ -101,6 +101,14 @@
                         </Import-Package>
                         <CONF_COMM/>
                     </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

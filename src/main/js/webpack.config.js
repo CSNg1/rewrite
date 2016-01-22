@@ -3,7 +3,6 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-
     },
     output: {
         path: path.join(__dirname, '..', 'resources', 'js'),

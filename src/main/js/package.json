@@ -1,7 +1,7 @@
 {
-  "name": "linking-plugin",
+  "name": "linking-rewrite",
   "version": "1.0.0",
-  "description": "Linking plugin rewrite",
+  "description": "Linking Plugin Rewrite.",
   "main": "index.js",
   "scripts": {},
   "author": "",
@@ -12,7 +12,7 @@
     "url": "https://github.com/CSNg1/rewrite.git"
   },
   "keywords": [
-    "ChiSiang"
+    "ServiceRocket"
   ],
   "dependencies": {
     "lodash": "^3.10.1"

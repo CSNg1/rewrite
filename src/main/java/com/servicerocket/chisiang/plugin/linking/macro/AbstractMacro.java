@@ -1,4 +1,4 @@
-package com.servicerocket.chisiang.plugin.linking;
+package com.servicerocket.chisiang.plugin.linking.macro;
 
 import com.atlassian.confluence.macro.Macro;
 
