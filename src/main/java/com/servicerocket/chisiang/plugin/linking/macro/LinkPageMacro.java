@@ -11,8 +11,11 @@ import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.renderer.links.Link;
 import com.atlassian.renderer.links.LinkResolver;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,9 +35,14 @@ public class LinkPageMacro extends AbstractMacro {
     protected final PageTemplateManager pageTemplateManager;
     protected final SpaceManager spaceManager;
 
-    private String pageName = "pageName";
-    private String linkText = "linkText";
+    private String paramPageName = "pageName";
+    private String paramLinkText = "linkText";
     private String pageUrl = "pageUrl";
+    private String paramTemplate = "template";
+    private String paramPrefix = "prefix";
+    private String paramPostfix = "postfix";
+    private String paramParent = "parent";
+    private String paramLabels = "labels";
 
     public LinkPageMacro(PageManager pageManager, LinkResolver linkResolver, ContextPathHolder contextPathHolder, PageTemplateManager pageTemplateManager, SpaceManager spaceManager) {
         this.pageManager = pageManager;
@@ -49,14 +57,16 @@ public class LinkPageMacro extends AbstractMacro {
 
         String linkTextRegex = "([A-Z]{1,4}):(.*)";
         Pattern linkTextPattern = Pattern.compile(linkTextRegex);
-        Matcher linkTextMatcher = linkTextPattern.matcher(map.get(pageName));
+        Matcher linkTextMatcher = linkTextPattern.matcher(map.get(paramPageName));
+
+        Page parentPage = pageManager.getPage(conversionContext.getEntity().getId()).getParent();
 
         Page targetPage = null;
 
         if (linkTextMatcher.matches()) {
-            targetPage = pageManager.getPage(map.get(pageName).replaceAll(linkTextRegex, "$1"), map.get(pageName).replaceAll(linkTextRegex, "$2"));
+            targetPage = pageManager.getPage(map.get(paramPageName).replaceAll(linkTextRegex, "$1"), map.get(paramPageName).replaceAll(linkTextRegex, "$2"));
         } else {
-            targetPage = pageManager.getPage(conversionContext.getSpaceKey(), map.get(pageName));
+            targetPage = pageManager.getPage(conversionContext.getSpaceKey(), map.get(paramPageName));
         }
 
         if (targetPage != null) {
@@ -68,17 +78,44 @@ public class LinkPageMacro extends AbstractMacro {
         } else {
             Map<String, String> newPageParams = new HashMap<String, String>();
             newPageParams.put("spaceKey", conversionContext.getSpaceKey());
-            newPageParams.put("title", map.get(linkText));
 
-            if (map.get("source") != null && map.get("sourceType").equals("template")) {
-                PageTemplate template = pageTemplateManager.getPageTemplate(map.get("source"), spaceManager.getSpace(conversionContext.getSpaceKey()));
+            String newPageTitle = map.get(paramPageName);
+
+            if (map.get(paramPrefix) != null) {
+                newPageTitle = map.get(paramPrefix) + newPageTitle;
+            }
+
+            if (map.get(paramPostfix) != null) {
+                newPageTitle = newPageTitle + map.get(paramPostfix);
+            }
+
+            newPageParams.put("title", newPageTitle);
+
+            if (map.get(paramTemplate) != null) {
+                PageTemplate template = pageTemplateManager.getPageTemplate(map.get(paramTemplate), spaceManager.getSpace(conversionContext.getSpaceKey()));
                 newPageParams.put("templateId", Long.toString(template.getId()));
             }
-            contextMap.put(pageUrl, generateUrl(newPageParams));
 
+            if (map.get(paramLabels) != null) {
+                newPageParams.put("labelsString", map.get(paramLabels));
+            }
+
+            if (map.get(paramParent) != null) {
+                switch (map.get(paramParent).toLowerCase()) {
+                    case "@parent":
+                        newPageParams.put("fromPageId", pageManager.getPage(conversionContext.getEntity().getId()).getParent().getIdAsString());
+                        break;
+                    case "@home":
+                        break;
+                    default:
+                        newPageParams.put("fromPageId", pageManager.getPage(conversionContext.getEntity().getId()).getIdAsString());
+                        break;
+                }
+            }
+            contextMap.put(pageUrl, generateUrl(newPageParams));
         }
 
-        contextMap.put(linkText, map.get(linkText));
+        contextMap.put(paramLinkText, map.get(paramLinkText));
 
         return renderMacro(contextMap);
     }
@@ -88,9 +125,13 @@ public class LinkPageMacro extends AbstractMacro {
         url.append(contextPathHolder.getContextPath());
         url.append("/pages/createpage-entervariables-labeled.action?");
 
+        List<String> tempList = new ArrayList<String>();
+
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            url.append(entry.getKey() + "=" + entry.getValue() + "&");
+            tempList.add(entry.getKey() + "=" + entry.getValue());
         }
+
+        url.append(String.join("&", tempList));
 
         return url.toString();
     }

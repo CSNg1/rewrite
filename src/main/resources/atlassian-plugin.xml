@@ -18,28 +18,17 @@
             </parameter>
             <parameter name="linkText" type="string" required="true">
             </parameter>
-            <parameter name="source" type="confluence-content">
+            <parameter name="template" type="confluence-content">
             </parameter>
-           <parameter name="sourceType" type="enum" default="template">
-                <value name="template"/>
-                <value name="page"/>
+            <parameter name="prefix" type="string">
+            </parameter>
+            <parameter name="postfix" type="string">
+            </parameter>
+            <parameter name="parent" type="string" default="@self">
+            </parameter>
+            <parameter name="labels" type="string" default="">
             </parameter>
             <!--
-            <parameter name="Live Template" type="boolean" default="false">
-                <alias name="liveTemplate"/>
-            </parameter>
-            <parameter name="Prefix" type="string">
-                <alias name="prefix"/>
-            </parameter>
-            <parameter name="Postfix" type="string">
-                <alias name="postfix"/>
-            </parameter>
-            <parameter name="Parent" type="string" default="@self">
-                <alias name="parent"/>
-            </parameter>
-            <parameter name="Labels" type="string" default="">
-                <alias name="pageLabels"/>
-            </parameter>
             <parameter name="Tip" type="string" default="">
                 <alias name="linkTip"/>
             </parameter>
