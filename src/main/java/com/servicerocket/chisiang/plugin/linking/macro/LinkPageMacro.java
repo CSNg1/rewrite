@@ -11,7 +11,6 @@ import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.renderer.links.Link;
 import com.atlassian.renderer.links.LinkResolver;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +37,8 @@ public class LinkPageMacro extends AbstractMacro {
     private String paramPageName = "pageName";
     private String paramLinkText = "linkText";
     private String pageUrl = "pageUrl";
-    private String paramTemplate = "template";
+    private String paramSource = "source";
+    private String paramSourceType = "sourceType";
     private String paramPrefix = "prefix";
     private String paramPostfix = "postfix";
     private String paramParent = "parent";
@@ -76,6 +76,7 @@ public class LinkPageMacro extends AbstractMacro {
             contextMap.put(pageUrl, contextPathHolder.getContextPath() + link.getUrl());
 
         } else {
+            String actionString = "/pages/createpage-entervariables-labeled.action?";
             Map<String, String> newPageParams = new HashMap<String, String>();
             newPageParams.put("spaceKey", conversionContext.getSpaceKey());
 
@@ -91,9 +92,18 @@ public class LinkPageMacro extends AbstractMacro {
 
             newPageParams.put("title", newPageTitle);
 
-            if (map.get(paramTemplate) != null) {
-                PageTemplate template = pageTemplateManager.getPageTemplate(map.get(paramTemplate), spaceManager.getSpace(conversionContext.getSpaceKey()));
-                newPageParams.put("templateId", Long.toString(template.getId()));
+            if (map.get(paramSourceType) != null && map.get(paramSourceType).equalsIgnoreCase("template")) {
+                PageTemplate template = pageTemplateManager.getPageTemplate(map.get(paramSource), spaceManager.getSpace(conversionContext.getSpaceKey()));
+                if (template != null) newPageParams.put("templateId", Long.toString(template.getId()));
+            }
+
+            if (map.get(paramSourceType) != null && map.get(paramSourceType).equalsIgnoreCase("page")) {
+                Page page = getConfluencePage(conversionContext.getSpaceKey(), map.get(paramSource));
+
+                if (page != null) {
+                    actionString = "/pages/createpage-entervariables-labeled-clone-page.action?";
+                    newPageParams.put("clonePageId", page.getIdAsString());
+                }
             }
 
             if (map.get(paramLabels) != null) {
@@ -112,7 +122,7 @@ public class LinkPageMacro extends AbstractMacro {
                         break;
                 }
             }
-            contextMap.put(pageUrl, generateUrl(newPageParams));
+            contextMap.put(pageUrl, generateUrl(actionString, newPageParams));
         }
 
         contextMap.put(paramLinkText, map.get(paramLinkText));
@@ -120,10 +130,10 @@ public class LinkPageMacro extends AbstractMacro {
         return renderMacro(contextMap);
     }
 
-    private String generateUrl(Map<String, String> params) {
+    private String generateUrl(String actionString, Map<String, String> params) {
         StringBuilder url = new StringBuilder();
         url.append(contextPathHolder.getContextPath());
-        url.append("/pages/createpage-entervariables-labeled.action?");
+        url.append(actionString);
 
         List<String> tempList = new ArrayList<String>();
 
@@ -134,6 +144,24 @@ public class LinkPageMacro extends AbstractMacro {
         url.append(String.join("&", tempList));
 
         return url.toString();
+    }
+
+    private Page getConfluencePage(String spaceKey, String pageName) {
+        Page confPage = null;
+
+        String linkTextRegex = "([A-Z]{1,4}):(.*)";
+        Pattern linkTextPattern = Pattern.compile(linkTextRegex);
+        Matcher linkTextMatcher = linkTextPattern.matcher(pageName);
+
+        if (linkTextMatcher.matches()) {
+            if (linkTextMatcher.matches()) {
+                confPage = pageManager.getPage(pageName.replaceAll(linkTextRegex, "$1"), pageName.replaceAll(linkTextRegex, "$2"));
+            } else {
+                confPage = pageManager.getPage(spaceKey, pageName);
+            }
+        }
+
+        return confPage;
     }
 
     Map<String, Object> getDefaultContext() {

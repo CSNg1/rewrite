@@ -5,7 +5,7 @@ package com.servicerocket.chisiang.plugin.linking;
  * @since 1.0.0.20160118
  */
 public final class PluginInfo {
-    public static final String PLUGIN_KEY = "com.servicerocket.chisiang.plugin.linking";
+    public static final String PLUGIN_KEY = "com.servicerocket.chisiang.plugin.com.servicerocket.chisiang.plugin.linking";
 
     public interface LinkPageMacro {
         static final String NAME = "Link Page";

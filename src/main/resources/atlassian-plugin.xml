@@ -6,9 +6,11 @@
         <param name="plugin-logo">logo.png</param>
     </plugin-info>
 
-    <xhtml-macro name="link page rewrite"
+    <resource name="pluginprops" type="i18n" location="value" />
+
+    <xhtml-macro name="link-page-rewrite"
                  class="com.servicerocket.chisiang.plugin.linking.macro.LinkPageMacro"
-                 key="linkpage-macro"
+                 key="link-page-rewrite"
                  documentation-url="https://docs.servicerocket.com/display/LIN/link-page">
         <description>Adds a link to a page, with an optional template and/or parent page specified if the page doesn't
             exist yet.
@@ -18,7 +20,11 @@
             </parameter>
             <parameter name="linkText" type="string" required="true">
             </parameter>
-            <parameter name="template" type="confluence-content">
+            <parameter name="source" type="confluence-content">
+            </parameter>
+            <parameter name="sourceType" type="enum">
+                <value name="template" />
+                <value name="page" />
             </parameter>
             <parameter name="prefix" type="string">
             </parameter>
