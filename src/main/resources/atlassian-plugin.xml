@@ -30,9 +30,9 @@
             </parameter>
             <parameter name="postfix" type="string">
             </parameter>
-            <parameter name="parent" type="string" default="@self">
+            <parameter name="parent" type="string">
             </parameter>
-            <parameter name="labels" type="string" default="">
+            <parameter name="labels" type="string">
             </parameter>
             <!--
             <parameter name="Tip" type="string" default="">
