@@ -23,8 +23,8 @@ import static com.atlassian.confluence.util.velocity.VelocityUtils.getRenderedTe
 import static com.servicerocket.chisiang.plugin.linking.PluginInfo.LinkPageMacro.TEMPLATE;
 
 /**
- * @author  CSNg.
- * @since 1.0.0.20160115
+ * @author CSNg
+ * @since  1.0.0.20160115
  */
 public class LinkPageMacro extends AbstractMacro {
 
@@ -73,8 +73,10 @@ public class LinkPageMacro extends AbstractMacro {
 
             Link link = getLinkResolver().createLink(conversionContext.getPageContext(), url);
             contextMap.put(pageUrl, contextPathHolder.getContextPath() + link.getUrl());
+        } else if (paramPageName.startsWith("http") || paramPageName.startsWith("www.")) {
+            contextMap.put(pageUrl, paramPageName);
         } else {
-            String actionString = "/pages/createpage-entervariables-labeled.action?";
+            String actionString = "/pages/createpage-entervariables.action?";
             Map<String, String> targetPageParams = new HashMap<>();
 
             targetPageParams.put("spaceKey", conversionContext.getSpaceKey());
@@ -85,11 +87,7 @@ public class LinkPageMacro extends AbstractMacro {
             if (paramSourceType != null) {
                 switch (paramSourceType.toLowerCase()) {
                     case "page":
-                        Page page = getConfluencePage(conversionContext.getSpaceKey(), paramSource);
-                        if (page != null) {
-                            actionString = "/pages/createpage-entervariables-labeled-clone-page.action?";
-                            targetPageParams.put("clonePageId", page.getIdAsString());
-                        }
+                        //TODO
                         break;
 
                     case "template":
@@ -102,7 +100,7 @@ public class LinkPageMacro extends AbstractMacro {
                 }
             }
 
-            //TODO: Confluence createpage-entervariable action's labelsString is broken
+            //TODO: Confluence createpage-entervariables action's labelsString is broken
             if (paramLabels != null) targetPageParams.put("labelsString", paramLabels);
 
             if (paramParent != null) {
@@ -129,7 +127,7 @@ public class LinkPageMacro extends AbstractMacro {
         return renderMacro(contextMap);
     }
 
-    private String formPageTitle(String prefix, String pageName, String postfix) {
+    public String formPageTitle(String prefix, String pageName, String postfix) {
         if (prefix != null) pageName = prefix + pageName;
 
         if (postfix != null) pageName = pageName + postfix;

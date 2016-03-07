@@ -31,14 +31,16 @@
 
         <amps.enableCompression>true</amps.enableCompression>
 
-        <platform.minVersion>5.9.3</platform.minVersion>
-        <platform.maxVersion>5.9.3</platform.maxVersion>
+        <platform.minVersion>5.9.4</platform.minVersion>
+        <platform.maxVersion>5.9.4</platform.maxVersion>
 
         <nodeVersion>v5.2.0</nodeVersion>
         <npmVersion>3.3.12</npmVersion>
 
         <json-simple.version>1.1.1</json-simple.version>
 
+        <junit.version>4.12</junit.version>
+        <atlassian-selenium.version>2.4.0</atlassian-selenium.version>
     </properties>
 
     <dependencies>
@@ -48,9 +50,22 @@
             <version>${json-simple.version}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.selenium</groupId>
+            <artifactId>atlassian-selenium-browsers-auto</artifactId>
+            <version>${atlassian-selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
         <plugins>
             <!--<plugin>
                 <groupId>com.github.eirslett</groupId>
@@ -97,6 +112,9 @@
                 <configuration>
                     <compressJs>${amps.enableCompression}</compressJs>
                     <compressCss>${amps.enableCompression}</compressCss>
+                    <systemPropertyVariables>
+                        <selenium.browser>chrome-7</selenium.browser>
+                    </systemPropertyVariables>
                     <instructions>
                         <Import-Package>
                             com.atlassian.confluence.*;version="[5,7)",
@@ -112,11 +130,23 @@
                         </Import-Package>
                         <CONF_COMM/>
                     </instructions>
+                    <testGroups>
+                        <testGroup>
+                            <id>linking-it</id>
+                            <productIds>
+                                <productId>confluence</productId>
+                            </productIds>
+                            <includes>
+                                <include>it/**/*.java</include>
+                            </includes>
+                        </testGroup>
+                    </testGroups>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>

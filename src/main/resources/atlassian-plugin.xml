@@ -8,6 +8,41 @@
 
     <resource name="pluginprops" type="i18n" location="value" />
 
+    <xhtml-macro name="add-page-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.AddPageMacro"
+                 key="add-page-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/add-page">
+        <description>Adds a link for creating a new page, with an optional template and/or parent page specified.
+        </description>
+        <parameters>
+            <parameter name="pageName" type="string">
+            </parameter>
+            <parameter name="linkText" type="string" required="true">
+            </parameter>
+            <parameter name="source" type="confluence-content">
+            </parameter>
+            <parameter name="sourceType" type="enum">
+                <value name="template" />
+                <value name="page" />
+            </parameter>
+            <parameter name="prefix" type="string">
+            </parameter>
+            <parameter name="postfix" type="string">
+            </parameter>
+            <parameter name="parent" type="string">
+            </parameter>
+            <parameter name="labels" type="string">
+            </parameter>
+            <!--
+            <parameter name="Tip" type="string" default="">
+                <alias name="linkTip"/>
+            </parameter>
+            <parameter name="Allow Rename" type="boolean" default="false">
+                <alias name="allowRename"/>
+            </parameter>-->
+        </parameters>
+    </xhtml-macro>
+
     <xhtml-macro name="link-page-rewrite"
                  class="com.servicerocket.chisiang.plugin.linking.macro.LinkPageMacro"
                  key="link-page-rewrite"
@@ -41,6 +76,25 @@
             <parameter name="Allow Rename" type="boolean" default="false">
                 <alias name="allowRename"/>
             </parameter>-->
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name="link-window-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.LinkWindowMacro"
+                 key="link-window-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/link-window">
+        <description>Links to a location, displaying it in a new window.
+        </description>
+        <parameters>
+            <parameter name="link" type="confluence-content" required="true">
+            </parameter>
+            <parameter name="linkText" type="string" required="true">
+            </parameter>
+            <parameter name="windowType" type="enum" required="true">
+                <value name="normal" />
+                <value name="popup" />
+                <value name="tab" />
+            </parameter>
         </parameters>
     </xhtml-macro>
 
