@@ -21,4 +21,14 @@ public final class PluginInfo {
         static final String NAME = "Link in New Window";
         static final String TEMPLATE = "templates/macro/linkwindow.vm";
     }
+
+    public interface OutgoingLinkMacro {
+        static final String NAME = "Outgoing Links";
+        static final String TEMPLATE = "templates/macro/outgoinglinks.vm";
+    }
+
+    public interface IncomingLinkMacro {
+        static final String NAME = "Incoming Links";
+        static final String TEMPLATE = "templates/macro/incominglinks.vm";
+    }
 }

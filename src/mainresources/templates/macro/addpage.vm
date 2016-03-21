@@ -1,4 +1,0 @@
-<span>
-    <a href=${pageUrl}>${linkText}
-    </a>
-</span>

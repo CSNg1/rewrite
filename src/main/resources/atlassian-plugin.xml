@@ -95,6 +95,42 @@
                 <value name="popup" />
                 <value name="tab" />
             </parameter>
+            <parameter name="width" type="string">
+            </parameter>
+            <parameter name="height" type="string">
+            </parameter>
+            <parameter name="scrollbars" type="boolean" default="true">
+            </parameter>
+            <parameter name="menubar" type="boolean" default="true">
+            </parameter>
+            <parameter name="locationbar" type="boolean" default="true">
+            </parameter>
+            <parameter name="statusbar" type="boolean" default="true">
+            </parameter>
+            <parameter name="resizable" type="boolean" default="true">
+            </parameter>
+            <parameter name="icon" type="boolean" default="true">
+            </parameter>
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name="outgoing-links-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.OutgoingLinkMacro"
+                 key="outgoing-links-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/link-window">
+        <description>Links to a location, displaying it in a new window.
+        </description>
+        <parameters>
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name="incoming-links-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.IncomingLinkMacro"
+                 key="incoming-links-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/link-window">
+        <description>Links to a location, displaying it in a new window.
+        </description>
+        <parameters>
         </parameters>
     </xhtml-macro>
 

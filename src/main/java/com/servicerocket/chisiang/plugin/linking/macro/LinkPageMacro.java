@@ -11,10 +11,9 @@ import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.renderer.links.Link;
 import com.atlassian.renderer.links.LinkResolver;
+import com.servicerocket.chisiang.plugin.linking.implementation.LinkPageImpl;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,10 +33,6 @@ public class LinkPageMacro extends AbstractMacro {
     protected final PageTemplateManager pageTemplateManager;
     protected final SpaceManager spaceManager;
 
-
-    private String pageUrl = "pageUrl";
-    private String linkText = "linkText";
-
     public LinkPageMacro(PageManager pageManager, LinkResolver linkResolver, ContextPathHolder contextPathHolder, PageTemplateManager pageTemplateManager, SpaceManager spaceManager) {
         this.pageManager = pageManager;
         this.linkResolver = linkResolver;
@@ -47,6 +42,8 @@ public class LinkPageMacro extends AbstractMacro {
     }
 
     public String execute(Map<String, String> map, String s, ConversionContext conversionContext) throws MacroExecutionException {
+        LinkPageImpl linkPageImpl = new LinkPageImpl();
+
         Map<String, Object> contextMap = getDefaultContext();
 
         String paramPageName = map.get("pageName");
@@ -58,16 +55,9 @@ public class LinkPageMacro extends AbstractMacro {
         String paramParent = map.get("parent");
         String paramLabels = map.get("labels");
 
-        String confPageRegex = "([A-Z]{1,4}):(.*)";
-        Pattern confPagePattern = Pattern.compile(confPageRegex);
-        Matcher confPageMatcher = confPagePattern.matcher(paramPageName);
+        Page targetPage = getConfluencePage(conversionContext.getSpaceKey(), paramPageName);
 
-        Page targetPage = pageManager.getPage(conversionContext.getSpaceKey(), paramPageName);
-
-        if (confPageMatcher.matches()) {
-            targetPage = pageManager.getPage(paramPageName.replaceAll(confPageRegex, "$1"), paramPageName.replaceAll(confPageRegex, "$2"));
-        }
-
+        String pageUrl = "pageUrl";
         if (targetPage != null) {
             String url = "$" + targetPage.getId();
 
@@ -81,7 +71,7 @@ public class LinkPageMacro extends AbstractMacro {
 
             targetPageParams.put("spaceKey", conversionContext.getSpaceKey());
 
-            targetPageParams.put("title", formPageTitle(paramPrefix, paramPageName, paramPostfix));
+            targetPageParams.put("title", linkPageImpl.formPageTitle(paramPrefix, paramPageName, paramPostfix));
 
             //TODO: https://jira.atlassian.com/browse/CONF-23704 (default macro parameters ignored)
             if (paramSourceType != null) {
@@ -120,41 +110,18 @@ public class LinkPageMacro extends AbstractMacro {
                         break;
                 }
             }
-            contextMap.put(pageUrl, buildUrl(actionString, targetPageParams));
+            contextMap.put(pageUrl, linkPageImpl.buildUrl(contextPathHolder.getContextPath(), actionString, targetPageParams));
         }
+        String linkText = "linkText";
         contextMap.put(linkText, paramLinkText);
 
         return renderMacro(contextMap);
     }
 
-    public String formPageTitle(String prefix, String pageName, String postfix) {
-        if (prefix != null) pageName = prefix + pageName;
-
-        if (postfix != null) pageName = pageName + postfix;
-
-        return pageName;
-    }
-
-    private String buildUrl(String actionString, Map<String, String> params) {
-        StringBuilder url = new StringBuilder();
-        url.append(contextPathHolder.getContextPath());
-        url.append(actionString);
-
-        List<String> tempList = new ArrayList<String>();
-
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            tempList.add(entry.getKey() + "=" + entry.getValue());
-        }
-
-        url.append(String.join("&", tempList));
-
-        return url.toString();
-    }
-
     private Page getConfluencePage(String spaceKey, String pageName) {
         Page confPage;
 
-        String linkTextRegex = "([A-Z]{1,4}):(.*)";
+        String linkTextRegex = "([A-Z]{1,5}):(.*)";
         Pattern linkTextPattern = Pattern.compile(linkTextRegex);
         Matcher linkTextMatcher = linkTextPattern.matcher(pageName);
 

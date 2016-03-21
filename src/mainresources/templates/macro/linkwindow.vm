@@ -1,4 +1,0 @@
-<span>
-    <a href=${pageUrl} ${target} #if (!$target) onclick="window.open('${pageUrl}', '', 'width=250, height=${height}'); return false;" #end>${linkText}
-    </a>
-</span>

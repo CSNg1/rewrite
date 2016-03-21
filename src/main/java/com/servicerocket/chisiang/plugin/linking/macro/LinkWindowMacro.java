@@ -6,7 +6,6 @@ import com.atlassian.confluence.macro.MacroExecutionException;
 import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
-import com.atlassian.confluence.velocity.htmlsafe.HtmlSafe;
 import com.atlassian.renderer.links.Link;
 import com.atlassian.renderer.links.LinkResolver;
 
@@ -19,7 +18,7 @@ import static com.servicerocket.chisiang.plugin.linking.PluginInfo.LinkWindowMac
 
 /**
  * @author CSNg
- * @since  1.0.0.20160115
+ * @since 1.0.0.20160115
  */
 public class LinkWindowMacro extends AbstractMacro {
 
@@ -42,6 +41,7 @@ public class LinkWindowMacro extends AbstractMacro {
         String paramPageName = map.get("link");
         String paramLinkText = map.get("linkText");
         String paramWindowType = map.get("windowType");
+
 
         String confPageRegex = "([A-Z]{1,4}):(.*)";
         Pattern confPagePattern = Pattern.compile(confPageRegex);
@@ -67,8 +67,44 @@ public class LinkWindowMacro extends AbstractMacro {
                 break;
 
             case "popup":
-                //contextMap.put("width", 250);
-                contextMap.put("height", 250);
+                String paramWidth = "", paramHeight = "", paramScrollbars = "yes", paramMenubar = "yes",
+                        paramLocationbar = "yes", paramStatusbar = "yes";
+                if (map.get("width") != null) {
+                    paramWidth = map.get("width");
+                    contextMap.put("width", paramWidth);
+                }
+                if (map.get("height") != null) {
+                    paramHeight = map.get("height");
+                    contextMap.put("height", paramHeight);
+                }
+                if (map.get("scrollbars") != null) {
+                    if (!Boolean.parseBoolean(map.get("scrollbars"))) {
+                        paramScrollbars = "no";
+                    }
+                }
+                contextMap.put("scrollbars", paramScrollbars);
+
+                if (map.get("menubar") != null) {
+                    if (!Boolean.parseBoolean(map.get("menubar"))) {
+                        paramMenubar = "no";
+                    }
+                }
+                contextMap.put("menubar", paramMenubar);
+
+                if (map.get("locationbar") != null) {
+                    if (!Boolean.parseBoolean(map.get("locationbar"))) {
+                        paramLocationbar = "no";
+                    }
+                }
+                contextMap.put("location", paramLocationbar);
+
+                if (map.get("statusbar") != null) {
+                    if (!Boolean.parseBoolean(map.get("statusbar"))) {
+                        paramStatusbar = "no";
+                    }
+                }
+                contextMap.put("status", paramStatusbar);
+
                 break;
 
             case "tab":
@@ -84,10 +120,6 @@ public class LinkWindowMacro extends AbstractMacro {
         return renderMacro(contextMap);
     }
 
-    @HtmlSafe
-    private String getOnClick() {
-        return "width=300, height=250";
-    }
     Map<String, Object> getDefaultContext() {
         return MacroUtils.defaultVelocityContext();
     }
@@ -104,6 +136,8 @@ public class LinkWindowMacro extends AbstractMacro {
         return OutputType.INLINE;
     }
 
-    private LinkResolver getLinkResolver() { return linkResolver; }
+    private LinkResolver getLinkResolver() {
+        return linkResolver;
+    }
 
 }
