@@ -19,13 +19,13 @@ import java.util.List;
 import java.util.Map;
 
 import static com.atlassian.confluence.util.velocity.VelocityUtils.getRenderedTemplate;
-import static com.servicerocket.chisiang.plugin.linking.PluginInfo.IncomingLinkMacro.TEMPLATE;
+import static com.servicerocket.chisiang.plugin.linking.PluginInfo.IncomingLinksMacro.TEMPLATE;
 
 /**
  * @author CSNg
  * @since  1.0.0.20160115
  */
-public class IncomingLinkMacro extends AbstractMacro {
+public class IncomingLinksMacro extends AbstractMacro {
 
     protected final PageManager pageManager;
     protected final ContextPathHolder contextPathHolder;
@@ -33,7 +33,7 @@ public class IncomingLinkMacro extends AbstractMacro {
     protected final PermissionManager permissionManager;
     protected final LinkManager linkManager;
 
-    public IncomingLinkMacro(PageManager pageManager, ContextPathHolder contextPathHolder, SpaceManager spaceManager, PermissionManager permissionManager, LinkManager linkManager) {
+    public IncomingLinksMacro(PageManager pageManager, ContextPathHolder contextPathHolder, SpaceManager spaceManager, PermissionManager permissionManager, LinkManager linkManager) {
         this.pageManager = pageManager;
         this.contextPathHolder = contextPathHolder;
         this.spaceManager = spaceManager;

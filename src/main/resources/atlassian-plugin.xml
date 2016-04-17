@@ -7,6 +7,15 @@
     </plugin-info>
 
     <resource name="pluginprops" type="i18n" location="value" />
+    <web-resource key="iconImage" name="iconImage">
+        <resource type="download" name="images/" location="images/" />
+    </web-resource>
+
+    <web-resource key="linkingJs" name="linkingJs">
+        <resource type="download" name="linking.js" location="js/linking.js" />
+        <dependency>confluence.editor.actions:editor-macro-browser</dependency>
+        <context>macro-browser</context>
+    </web-resource>
 
     <xhtml-macro name="add-page-rewrite"
                  class="com.servicerocket.chisiang.plugin.linking.macro.AddPageMacro"
@@ -16,6 +25,67 @@
         </description>
         <parameters>
             <parameter name="pageName" type="string">
+            </parameter>
+            <parameter name="linkText" type="string" required="true">
+            </parameter>
+            <parameter name="template" type="string">
+            </parameter>
+            <parameter name="prefix" type="string">
+            </parameter>
+            <parameter name="postfix" type="string">
+            </parameter>
+            <parameter name="parent" type="confluence-content" default="@self">
+            </parameter>
+            <parameter name="labels" type="string">
+            </parameter>
+            <parameter name="tip" type="string">
+            </parameter>
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name="add-page-form-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.AddPageFormMacro"
+                 key="add-page-form-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/add-page-form">
+        <description>Adds a text box and submit button for creating a new page, with an optional template and/or parent
+            page specified.
+        </description>
+        <parameters>
+            <parameter name="linkText" type="string" required="true">
+            </parameter>
+            <parameter name="template" type="string">
+            </parameter>
+            <parameter name="prefix" type="string">
+            </parameter>
+            <parameter name="postfix" type="string">
+            </parameter>
+            <parameter name="parent" type="confluence-content" default="@self">
+            </parameter>
+            <parameter name="labels" type="string">
+            </parameter>
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name="link-from-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.LinkFromMacro"
+                 key="link-from-rewrite">
+        <description>xxx
+        </description>
+        <parameters>
+            <parameter name="locationId" type="string" required="true">
+            </parameter>
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name="link-page-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.LinkPageMacro"
+                 key="link-page-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/link-page">
+        <description>Adds a link to a page, with an optional template and/or parent page specified if the page doesn't
+            exist yet.
+        </description>
+        <parameters>
+            <parameter name="pageName" type="confluence-content">
             </parameter>
             <parameter name="linkText" type="string" required="true">
             </parameter>
@@ -43,15 +113,15 @@
         </parameters>
     </xhtml-macro>
 
-    <xhtml-macro name="link-page-rewrite"
-                 class="com.servicerocket.chisiang.plugin.linking.macro.LinkPageMacro"
-                 key="link-page-rewrite"
-                 documentation-url="https://docs.servicerocket.com/display/LIN/link-page">
-        <description>Adds a link to a page, with an optional template and/or parent page specified if the page doesn't
-            exist yet.
+    <xhtml-macro name="link-to-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.LinkToMacro"
+                 key="link-to-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/add-page">
+        <description>Adds a link for creating a new page, with an optional template and/or parent page specified.
         </description>
         <parameters>
-            <parameter name="pageName" type="confluence-content">
+            <parameter name="location" type="enum">
+                <value name="admin"/>
             </parameter>
             <parameter name="linkText" type="string" required="true">
             </parameter>
@@ -115,7 +185,7 @@
     </xhtml-macro>
 
     <xhtml-macro name="outgoing-links-rewrite"
-                 class="com.servicerocket.chisiang.plugin.linking.macro.OutgoingLinkMacro"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.OutgoingLinksMacro"
                  key="outgoing-links-rewrite"
                  documentation-url="https://docs.servicerocket.com/display/LIN/link-window">
         <description>Links to a location, displaying it in a new window.
@@ -125,8 +195,28 @@
     </xhtml-macro>
 
     <xhtml-macro name="incoming-links-rewrite"
-                 class="com.servicerocket.chisiang.plugin.linking.macro.IncomingLinkMacro"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.IncomingLinksMacro"
                  key="incoming-links-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/link-window">
+        <description>Links to a location, displaying it in a new window.
+        </description>
+        <parameters>
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name="undefined-links-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.UndefinedLinksMacro"
+                 key="undefined-links-rewrite"
+                 documentation-url="https://docs.servicerocket.com/display/LIN/link-window">
+        <description>Links to a location, displaying it in a new window.
+        </description>
+        <parameters>
+        </parameters>
+    </xhtml-macro>
+
+    <xhtml-macro name="orphaned-links-rewrite"
+                 class="com.servicerocket.chisiang.plugin.linking.macro.OrphanedLinksMacro"
+                 key="orphaned-links-rewrite"
                  documentation-url="https://docs.servicerocket.com/display/LIN/link-window">
         <description>Links to a location, displaying it in a new window.
         </description>

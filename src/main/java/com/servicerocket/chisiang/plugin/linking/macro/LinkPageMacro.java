@@ -11,9 +11,10 @@ import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.renderer.links.Link;
 import com.atlassian.renderer.links.LinkResolver;
-import com.servicerocket.chisiang.plugin.linking.implementation.LinkPageImpl;
+import com.servicerocket.chisiang.plugin.linking.implementation.LinkingImpl;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,7 +43,7 @@ public class LinkPageMacro extends AbstractMacro {
     }
 
     public String execute(Map<String, String> map, String s, ConversionContext conversionContext) throws MacroExecutionException {
-        LinkPageImpl linkPageImpl = new LinkPageImpl();
+        LinkingImpl linkingImpl = new LinkingImpl();
 
         Map<String, Object> contextMap = getDefaultContext();
 
@@ -55,9 +56,11 @@ public class LinkPageMacro extends AbstractMacro {
         String paramParent = map.get("parent");
         String paramLabels = map.get("labels");
 
-        Page targetPage = getConfluencePage(conversionContext.getSpaceKey(), paramPageName);
-
         String pageUrl = "pageUrl";
+        String linkText = "linkText";
+
+        Page targetPage = getConfluencePage(paramPageName, conversionContext.getSpaceKey());
+
         if (targetPage != null) {
             String url = "$" + targetPage.getId();
 
@@ -67,11 +70,11 @@ public class LinkPageMacro extends AbstractMacro {
             contextMap.put(pageUrl, paramPageName);
         } else {
             String actionString = "/pages/createpage-entervariables.action?";
-            Map<String, String> targetPageParams = new HashMap<>();
+            Map<String, String> targetPageParams = new LinkedHashMap<>();
 
             targetPageParams.put("spaceKey", conversionContext.getSpaceKey());
 
-            targetPageParams.put("title", linkPageImpl.formPageTitle(paramPrefix, paramPageName, paramPostfix));
+            targetPageParams.put("title", linkingImpl.formPageTitle(paramPrefix, paramPageName, paramPostfix));
 
             //TODO: https://jira.atlassian.com/browse/CONF-23704 (default macro parameters ignored)
             if (paramSourceType != null) {
@@ -110,15 +113,15 @@ public class LinkPageMacro extends AbstractMacro {
                         break;
                 }
             }
-            contextMap.put(pageUrl, linkPageImpl.buildUrl(contextPathHolder.getContextPath(), actionString, targetPageParams));
+            contextMap.put(pageUrl, linkingImpl.buildUrl(contextPathHolder.getContextPath(), actionString, targetPageParams));
         }
-        String linkText = "linkText";
+
         contextMap.put(linkText, paramLinkText);
 
         return renderMacro(contextMap);
     }
 
-    private Page getConfluencePage(String spaceKey, String pageName) {
+    private Page getConfluencePage(String pageName, String spaceKey) {
         Page confPage;
 
         String linkTextRegex = "([A-Z]{1,5}):(.*)";

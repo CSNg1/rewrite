@@ -26,9 +26,6 @@ public class LinkWindowMacro extends AbstractMacro {
     protected final LinkResolver linkResolver;
     protected final ContextPathHolder contextPathHolder;
 
-    private String pageUrl = "pageUrl";
-    private String linkText = "linkText";
-
     public LinkWindowMacro(PageManager pageManager, LinkResolver linkResolver, ContextPathHolder contextPathHolder) {
         this.pageManager = pageManager;
         this.linkResolver = linkResolver;
@@ -42,16 +39,10 @@ public class LinkWindowMacro extends AbstractMacro {
         String paramLinkText = map.get("linkText");
         String paramWindowType = map.get("windowType");
 
+        String pageUrl = "pageUrl";
+        String linkText = "linkText";
 
-        String confPageRegex = "([A-Z]{1,4}):(.*)";
-        Pattern confPagePattern = Pattern.compile(confPageRegex);
-        Matcher confPageMatcher = confPagePattern.matcher(paramPageName);
-
-        Page targetPage = pageManager.getPage(conversionContext.getSpaceKey(), paramPageName);
-
-        if (confPageMatcher.matches()) {
-            targetPage = pageManager.getPage(paramPageName.replaceAll(confPageRegex, "$1"), paramPageName.replaceAll(confPageRegex, "$2"));
-        }
+        Page targetPage = getConfluencePage(paramPageName, conversionContext.getSpaceKey());
 
         if (targetPage != null) {
             String url = "$" + targetPage.getId();
@@ -67,44 +58,8 @@ public class LinkWindowMacro extends AbstractMacro {
                 break;
 
             case "popup":
-                String paramWidth = "", paramHeight = "", paramScrollbars = "yes", paramMenubar = "yes",
-                        paramLocationbar = "yes", paramStatusbar = "yes";
-                if (map.get("width") != null) {
-                    paramWidth = map.get("width");
-                    contextMap.put("width", paramWidth);
-                }
-                if (map.get("height") != null) {
-                    paramHeight = map.get("height");
-                    contextMap.put("height", paramHeight);
-                }
-                if (map.get("scrollbars") != null) {
-                    if (!Boolean.parseBoolean(map.get("scrollbars"))) {
-                        paramScrollbars = "no";
-                    }
-                }
-                contextMap.put("scrollbars", paramScrollbars);
-
-                if (map.get("menubar") != null) {
-                    if (!Boolean.parseBoolean(map.get("menubar"))) {
-                        paramMenubar = "no";
-                    }
-                }
-                contextMap.put("menubar", paramMenubar);
-
-                if (map.get("locationbar") != null) {
-                    if (!Boolean.parseBoolean(map.get("locationbar"))) {
-                        paramLocationbar = "no";
-                    }
-                }
-                contextMap.put("location", paramLocationbar);
-
-                if (map.get("statusbar") != null) {
-                    if (!Boolean.parseBoolean(map.get("statusbar"))) {
-                        paramStatusbar = "no";
-                    }
-                }
-                contextMap.put("status", paramStatusbar);
-
+                if (map.get("width") != null) contextMap.put("width", map.get("width"));
+                if (map.get("height") != null) contextMap.put("height", map.get("height"));
                 break;
 
             case "tab":
@@ -118,6 +73,22 @@ public class LinkWindowMacro extends AbstractMacro {
         contextMap.put(linkText, paramLinkText);
 
         return renderMacro(contextMap);
+    }
+
+    private Page getConfluencePage(String pageName, String spaceKey) {
+        Page confPage;
+
+        String linkTextRegex = "([A-Z]{1,5}):(.*)";
+        Pattern linkTextPattern = Pattern.compile(linkTextRegex);
+        Matcher linkTextMatcher = linkTextPattern.matcher(pageName);
+
+        if (linkTextMatcher.matches()) {
+            confPage = pageManager.getPage(pageName.replaceAll(linkTextRegex, "$1"), pageName.replaceAll(linkTextRegex, "$2"));
+        } else {
+            confPage = pageManager.getPage(spaceKey, pageName);
+        }
+
+        return confPage;
     }
 
     Map<String, Object> getDefaultContext() {

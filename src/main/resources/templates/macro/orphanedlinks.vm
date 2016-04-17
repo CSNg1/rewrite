@@ -1,0 +1,11 @@
+<table>
+    <tbody>
+    #foreach ($link in ${orphanedLinks})
+        <tr>
+            <td>
+                <a href=$link>$link</a>
+            </td>
+        </tr>
+    #end
+    </tbody>
+</table>

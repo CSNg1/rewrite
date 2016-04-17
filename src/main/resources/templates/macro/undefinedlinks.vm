@@ -1,0 +1,11 @@
+<table>
+    <tbody>
+    #foreach ($link in ${undefinedLinks})
+        <tr>
+            <td>
+                <a href=$link>$link</a>
+            </td>
+        </tr>
+    #end
+    </tbody>
+</table>

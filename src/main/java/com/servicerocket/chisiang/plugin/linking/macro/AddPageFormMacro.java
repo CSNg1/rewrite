@@ -11,6 +11,7 @@ import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 import com.atlassian.confluence.spaces.SpaceManager;
 import com.atlassian.renderer.links.LinkResolver;
 import com.servicerocket.chisiang.plugin.linking.implementation.LinkingImpl;
+import org.apache.commons.lang.RandomStringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,14 +19,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.atlassian.confluence.util.velocity.VelocityUtils.getRenderedTemplate;
-import static com.servicerocket.chisiang.plugin.linking.PluginInfo.AddPageMacro.TEMPLATE;
+import static com.servicerocket.chisiang.plugin.linking.PluginInfo.AddPageFormMacro.TEMPLATE;
 import static com.servicerocket.chisiang.plugin.linking.PluginInfo.ERR_TEMPLATE;
 
 /**
  * @author CSNg
- * @since 1.0.0.20160115
+ * @since 1.0.0.20160403
  */
-public class AddPageMacro extends AbstractMacro {
+public class AddPageFormMacro extends AbstractMacro {
 
     protected final PageManager pageManager;
     protected final LinkResolver linkResolver;
@@ -33,7 +34,7 @@ public class AddPageMacro extends AbstractMacro {
     protected final PageTemplateManager pageTemplateManager;
     protected final SpaceManager spaceManager;
 
-    public AddPageMacro(PageManager pageManager, LinkResolver linkResolver, ContextPathHolder contextPathHolder, PageTemplateManager pageTemplateManager, SpaceManager spaceManager) {
+    public AddPageFormMacro(PageManager pageManager, LinkResolver linkResolver, ContextPathHolder contextPathHolder, PageTemplateManager pageTemplateManager, SpaceManager spaceManager) {
         this.pageManager = pageManager;
         this.linkResolver = linkResolver;
         this.contextPathHolder = contextPathHolder;
@@ -44,23 +45,19 @@ public class AddPageMacro extends AbstractMacro {
     public String execute(Map<String, String> map, String s, ConversionContext conversionContext) throws MacroExecutionException {
         LinkingImpl linkingImpl = new LinkingImpl();
         Map<String, Object> contextMap = getDefaultContext();
-        String contextPath = contextPathHolder.getContextPath();
+        String formId = RandomStringUtils.randomAlphabetic(6);
 
-        String paramPageName = map.containsKey("pageName") ? map.get("pageName") : "";
         String paramLinkText = map.containsKey("linkText") ? map.get("linkText") : "";
         String paramTemplate = map.containsKey("template") ? map.get("template") : "";
         String paramPrefix = map.containsKey("prefix") ? map.get("prefix") : "";
         String paramPostfix = map.containsKey("postfix") ? map.get("postfix") : "";
         String paramParent = map.containsKey("parent") ? map.get("parent") : "";
         String paramLabels = map.containsKey("labels") ? map.get("labels") : "";
-        String paramTip = map.containsKey("tip") ? map.get("tip") : "";
 
         String actionString = "/pages/createpage-entervariables.action?";
         Map<String, String> targetPageParams = new HashMap<>();
 
         targetPageParams.put("spaceKey", conversionContext.getSpaceKey());
-
-        targetPageParams.put("title", linkingImpl.formPageTitle(paramPrefix, paramPageName, paramPostfix));
 
         if (!paramTemplate.isEmpty()) {
             PageTemplate template;
@@ -109,10 +106,11 @@ public class AddPageMacro extends AbstractMacro {
         //TODO: Confluence createpage-entervariables action's labelsString is broken
         if (!paramLabels.isEmpty()) targetPageParams.put("labelsString", paramLabels);
 
-        contextMap.put("tip", paramTip);
-        contextMap.put("contextPath", contextPath);
-        contextMap.put("pageUrl", linkingImpl.buildUrl(contextPath, actionString, targetPageParams));
+        contextMap.put("pageUrl", linkingImpl.buildUrl(contextPathHolder.getContextPath(), actionString, targetPageParams));
         contextMap.put("linkText", paramLinkText);
+        contextMap.put("prefix", paramPrefix);
+        contextMap.put("postfix", paramPostfix);
+        contextMap.put("formId", formId);
 
         return renderMacro(contextMap);
     }
@@ -137,7 +135,9 @@ public class AddPageMacro extends AbstractMacro {
         return MacroUtils.defaultVelocityContext();
     }
 
-    String renderMacro(Map<String, Object> contextMap) { return getRenderedTemplate(TEMPLATE, contextMap); }
+    String renderMacro(Map<String, Object> contextMap) {
+        return getRenderedTemplate(TEMPLATE, contextMap);
+    }
 
     String renderErr(String errorMsg) {
         Map<String, Object> contextMap = getDefaultContext();

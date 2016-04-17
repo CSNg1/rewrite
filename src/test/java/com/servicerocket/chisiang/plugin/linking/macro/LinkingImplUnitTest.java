@@ -1,9 +1,10 @@
 package com.servicerocket.chisiang.plugin.linking.macro;
 
-import com.servicerocket.chisiang.plugin.linking.implementation.LinkPageImpl;
+import com.servicerocket.chisiang.plugin.linking.implementation.LinkingImpl;
 import org.junit.Test;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
@@ -13,9 +14,9 @@ import static org.junit.Assert.assertEquals;
  * @author CSNg
  * @since 1.0.0.20160229
  */
-public class LinkPageUnitTest {
+public class LinkingImplUnitTest {
 
-    LinkPageImpl linkPage = new LinkPageImpl();
+    LinkingImpl linkPage = new LinkingImpl();
 
     @Test public void testPageTitleWithPrefix() {
         String prefix = randomAlphanumeric(5);
@@ -49,7 +50,7 @@ public class LinkPageUnitTest {
         String contextPath = randomAlphanumeric(5);
         String actionString = randomAlphanumeric(5);
 
-        Map<String, String> pageParams = new HashMap<>();
+        Map<String, String> pageParams = new LinkedHashMap<>();
         String param1 = randomAlphanumeric(5);
         String value1 = randomAlphanumeric(5);
         String param2 = randomAlphanumeric(5);

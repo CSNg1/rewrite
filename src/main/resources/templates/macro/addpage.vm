@@ -1,4 +1,4 @@
 <span>
-    <a href=${pageUrl}>${linkText}
-    </a>
+    <img src="${contextPath}/download/resources/com.servicerocket.chisiang.plugin.linking:iconImage/images/plus-icon.png" width="16" height="16" alt="Add Page" >
+    <a href=${pageUrl} title="$tip">${linkText}</a>
 </span>

@@ -8,7 +8,7 @@ import java.util.Map;
  * @author CSNg
  * @since 1.0.0.20160321
  */
-public class LinkPageImpl {
+public class LinkingImpl {
 
     public String formPageTitle(String prefix, String pageName, String postfix) {
         if (prefix != null) pageName = prefix + pageName;
@@ -23,7 +23,7 @@ public class LinkPageImpl {
         url.append(contextPath);
         url.append(actionString);
 
-        List<String> paramList = new ArrayList<>();
+        List<String> paramList = new ArrayList<String>();
 
         for (Map.Entry<String, String> entry : pageParams.entrySet()) {
             paramList.add(entry.getKey() + "=" + entry.getValue());

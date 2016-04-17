@@ -1,0 +1,15 @@
+<span>
+    <form class="aui" id="${formId}" action=${pageUrl} method="post">
+        <input type="hidden" name="prefix" value="${prefix}" id="prefix${formId}">
+        <input type="text" name="title" id="title${formId}" placeholder="Enter page title" class="text">
+        <input type="hidden" name="postfix" value="${postfix}" id="postfix${formId}">
+        <input type="submit" value="${linkText}" class="aui-button">
+    </form>
+</span>
+
+<script>
+    AJS.$("#${formId}").submit(function() {
+        var titleValue = $("#title${formId}");
+        titleValue.val($("#prefix${formId}").val() + titleValue.val() + $("#postfix${formId}").val());
+    });
+</script>

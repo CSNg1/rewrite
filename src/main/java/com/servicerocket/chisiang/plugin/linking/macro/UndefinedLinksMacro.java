@@ -3,7 +3,6 @@ package com.servicerocket.chisiang.plugin.linking.macro;
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.links.OutgoingLink;
 import com.atlassian.confluence.macro.MacroExecutionException;
-import com.atlassian.confluence.pages.Page;
 import com.atlassian.confluence.pages.PageManager;
 import com.atlassian.confluence.renderer.radeox.macros.MacroUtils;
 
@@ -12,33 +11,29 @@ import java.util.List;
 import java.util.Map;
 
 import static com.atlassian.confluence.util.velocity.VelocityUtils.getRenderedTemplate;
-import static com.servicerocket.chisiang.plugin.linking.PluginInfo.OutgoingLinkMacro.TEMPLATE;
+import static com.servicerocket.chisiang.plugin.linking.PluginInfo.UndefinedLinksMacro.TEMPLATE;
 
 /**
  * @author CSNg
- * @since  1.0.0.20160310
+ * @since  1.0.0.20160401
  */
-public class OutgoingLinkMacro extends AbstractMacro {
+public class UndefinedLinksMacro extends AbstractMacro {
 
     protected final PageManager pageManager;
 
-    public OutgoingLinkMacro(PageManager pageManager) {
-        this.pageManager = pageManager;
-    }
+    public UndefinedLinksMacro(PageManager pageManager) { this.pageManager = pageManager; }
 
     public String execute(Map<String, String> map, String s, ConversionContext conversionContext) throws MacroExecutionException {
         Map<String, Object> contextMap = getDefaultContext();
 
-        Page targetPage = pageManager.getPage(conversionContext.getSpaceKey(), conversionContext.getPageContext().getPageTitle());
-
-        List<OutgoingLink> outgoingLinks = targetPage.getOutgoingLinks();
+        List<OutgoingLink> undefinedLinks = pageManager.getUndefinedPages(conversionContext.getSpaceKey());
 
         List<String> targetLinks = new ArrayList<>();
-        for (OutgoingLink ogl : outgoingLinks) {
-            targetLinks.add(ogl.getUrlLink());
+        for (OutgoingLink undefinedLink : undefinedLinks) {
+            targetLinks.add(undefinedLink.getUrlLink());
         }
 
-        contextMap.put("outgoingLinks", targetLinks);
+        contextMap.put("undefinedLinks", targetLinks);
 
         return renderMacro(contextMap);
     }
@@ -52,7 +47,7 @@ public class OutgoingLinkMacro extends AbstractMacro {
     }
 
     public BodyType getBodyType() {
-        return BodyType.NONE;
+        return BodyType.PLAIN_TEXT;
     }
 
     public OutputType getOutputType() {
